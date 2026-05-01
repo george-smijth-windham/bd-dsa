@@ -15,6 +15,17 @@ def recursive_filter(predicate, items, acc=[]):
 
 
 def recursive_filter_v2(predicate, items):
+    return (
+        []
+        if len(items) == 0
+        else (
+            ([items[0]] if predicate(items[0]) else [])
+            + recursive_filter(predicate, items[1:])
+        )
+    )
+
+
+def recursive_filter_v3(predicate, items):
     if len(items) == 0:
         return []
 
