@@ -1,14 +1,28 @@
 def merge_sort(nums):
-    # nums = [1,2]
-    # print(f"nums: {nums}", f"left_side: {nums[:len(nums) // 2]}", f"right_side: {nums[len(nums) // 2:]}")
-    # return []
     if len(nums) < 2:
         return nums
-    left_side = merge_sort(nums[: len(nums) // 2])
-    right_side = merge_sort(nums[len(nums) // 2 :])
-    print(f"nums: {nums}", f"left_side: {left_side}", f"right_side: {right_side}")
-    return merge(left_side, right_side)
+    left = merge_sort(nums[: len(nums) // 2])
+    right = merge_sort(nums[len(nums) // 2 :])
+    print(f"left: {left}, right: {right}")
+    return merge(left, right)
 
 
-def merge(left_side, right_side):
-    return []
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    print(f"i: {i}, j: {j}")
+    print(f"append left, left: {left}") if i < j else print(
+        f"append right, right: {right}"
+    )
+    # result.append(left) if i < j else result.append(right)
+    # result.extend(left[i:]) if i < j else result.extend(right[j:])
+    # result + left[i:] if i < j else result + right[j:]
+    # result = result + left[i:] if i < j else result + right[j]
+    return result + left[i:] if i < j else result + right[j:]
