@@ -25,4 +25,11 @@ def merge(left, right):
     # result.extend(left[i:]) if i < j else result.extend(right[j:])
     # result + left[i:] if i < j else result + right[j:]
     # result = result + left[i:] if i < j else result + right[j]
-    return result + left[i:] if i < j else result + right[j:]
+    # return result + left[i:] if i < j else result + right[j:]
+    while i < len(left):
+        result.append(left[i])
+        i += 1
+    while j < len(right):
+        result.append(right[j])
+        j += 1
+    return result
