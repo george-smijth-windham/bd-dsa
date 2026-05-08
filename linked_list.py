@@ -2,21 +2,12 @@ from node import Node
 
 
 class LinkedList:
+    def add_to_head(self, node):
+        head = self.head
+        node.set_next(head)
+        self.head = node
+
     def add_to_tail(self, node):
-        # if None == self.head:
-        #     self.head = node
-        #     return
-        # tail = None
-        # for _node in self:
-        #     tail = _node
-        # tail.next = node
-        # head = self.head
-        # if None == head:
-        #     self.head = node
-        # tail = None
-        # for next in self:
-        #     tail = next
-        # tail.set_next(node)
         if None == self.head:
             self.head = node
             return
@@ -24,8 +15,6 @@ class LinkedList:
         for _node in self:
             tail = _node
         tail.set_next(node)
-
-    # don't touch below this line
 
     def __init__(self):
         self.head = None
