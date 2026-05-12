@@ -20,6 +20,15 @@ class BSTNode:
         self.right = self.right.delete(successor)
         return self
 
+    def preorder(self, visited):
+        if self.val is not None:
+            visited.append(self.val)
+        if self.left is not None:
+            visited.extend(self.left.preorder([]))
+        if self.right is not None:
+            visited.extend(self.right.preorder([]))
+        return visited
+
     # don't touch below this line
 
     def __init__(self, val=None):
