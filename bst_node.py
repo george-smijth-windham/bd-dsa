@@ -29,6 +29,15 @@ class BSTNode:
             visited.extend(self.right.preorder([]))
         return visited
 
+    def postorder(self, visited):
+        if self.left is not None:
+            self.left.postorder(visited)
+        if self.right is not None:
+            self.right.postorder(visited)
+        if self.val is not None:
+            visited.append(self.val)
+        return visited
+
     # don't touch below this line
 
     def __init__(self, val=None):
