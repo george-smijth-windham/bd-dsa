@@ -22,3 +22,9 @@ class BSTNode:
         if val > self.val and self.right is not None:
             self.right.insert(val)
             return
+
+    def get_min(self):
+        return self.val if self.left is None else self.left.get_min()
+
+    def get_max(self):
+        return self.val if self.right is None else self.right.get_max()
