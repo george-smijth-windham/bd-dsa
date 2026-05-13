@@ -1,4 +1,17 @@
 class BSTNode:
+    def exists(self, val):
+        if self.val is not None:
+            if self.val < val:
+                if self.right is not None:
+                    return self.right.exists(val)
+                return False
+            if self.val > val:
+                if self.left is not None:
+                    return self.left.exists(val)
+                return False
+            return True
+        return False
+
     def delete(self, val):
         if self.val is None:
             return None
