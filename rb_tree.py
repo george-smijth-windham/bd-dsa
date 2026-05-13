@@ -10,4 +10,28 @@ class RBTree:
         self.root = self.nil
 
     def insert(self, val):
-        pass
+        new_node = RBNode(val)
+        new_node.parent = None
+        new_node.left = self.nil
+        new_node.right = self.nil
+        new_node.red = True
+
+        parent = None
+        current = self.root
+        while current != self.nil:
+            parent = current
+            if new_node.val < current.val:
+                current = current.left
+            elif new_node.val > current.val:
+                current = current.right
+            else:
+                # duplicate, just ignore
+                return
+
+        new_node.parent = parent
+        if parent is None:
+            self.root = new_node
+        elif new_node.val < parent.val:
+            parent.left = new_node
+        else:
+            parent.right = new_node
