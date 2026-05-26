@@ -1,4 +1,10 @@
-from rb_node import RBNode
+class RBNode:
+    def __init__(self, val):
+        self.red = False
+        self.parent = None
+        self.val = val
+        self.left = None
+        self.right = None
 
 
 class RBTree:
@@ -8,46 +14,6 @@ class RBTree:
         self.nil.left = None
         self.nil.right = None
         self.root = self.nil
-
-    def rotate_left(self, pivot_parent):
-        if pivot_parent == self.nil:
-            return
-        if pivot_parent.right == self.nil:
-            return
-        pivot = pivot_parent.right
-        pivot_parent.right = pivot.left
-        if pivot.left != self.nil:
-            pivot.left.parent = pivot_parent
-        pivot.parent = pivot_parent.parent
-        if pivot_parent == self.root:
-            self.root = pivot
-        else:
-            if pivot_parent == pivot_parent.parent.left:
-                pivot_parent.parent.left = pivot
-            if pivot_parent == pivot_parent.parent.right:
-                pivot_parent.parent.right = pivot
-        pivot.left = pivot_parent
-        pivot_parent.parent = pivot
-
-    def rotate_right(self, pivot_parent):
-        if pivot_parent == self.nil:
-            return
-        if pivot_parent.left == self.nil:
-            return
-        pivot = pivot_parent.left
-        pivot_parent.left = pivot.right
-        if pivot.right != self.nil:
-            pivot.right.parent = pivot_parent
-        pivot.parent = pivot_parent.parent
-        if pivot_parent == self.root:
-            self.root = pivot
-        else:
-            if pivot_parent == pivot_parent.parent.left:
-                pivot_parent.parent.left = pivot
-            if pivot_parent == pivot_parent.parent.right:
-                pivot_parent.parent.right = pivot
-        pivot.right = pivot_parent
-        pivot_parent.parent = pivot
 
     def insert(self, val):
         new_node = RBNode(val)
@@ -75,3 +41,90 @@ class RBTree:
             parent.left = new_node
         else:
             parent.right = new_node
+
+        self.fix_insert(new_node)
+
+    def fix_insert(self, new_node):
+        current_node = c = new_node
+        # root = r = self.root
+        # the above is bad as root might change in rotation
+        # use self.root not r
+        while c != self.root and c.parent.red == True:
+            # parent_node = p = current_node.parent
+            # the above is wrong as it is a stale ref, use c not current_node
+            parent = p = c.parent
+            grandparent_node = gp = p.parent
+            if p == gp.right:
+                uncle_node = u = gp.left
+                if u.red == True:
+                    u.red = p.red = False
+                    gp.red = True
+                    c = gp
+                else:
+                    if c == p.left:
+                        c = p
+                        self.rotate_right(c)
+                        p = c.parent
+                    p.red = False
+                    gp.red = True
+                    self.rotate_left(gp)
+            else:
+                uncle_node = u = gp.right
+                if u.red == True:
+                    u.red = p.red = False
+                    gp.red = True
+                    c = gp
+                else:
+                    if c == p.right:
+                        c = p
+                        self.rotate_left(c)
+                        p = c.parent
+                    p.red = False
+                    gp.red = True
+                    self.rotate_right(gp)
+        self.root.red = False
+
+    def exists(self, val):
+        curr = self.root
+        while curr != self.nil and val != curr.val:
+            if val < curr.val:
+                curr = curr.left
+            else:
+                curr = curr.right
+        return curr
+
+    def rotate_left(self, pivot_parent):
+        if pivot_parent == self.nil or pivot_parent.right == self.nil:
+            return
+        pivot = pivot_parent.right
+        pivot_parent.right = pivot.left
+        if pivot.left != self.nil:
+            pivot.left.parent = pivot_parent
+
+        pivot.parent = pivot_parent.parent
+        if pivot_parent.parent is None:
+            self.root = pivot
+        elif pivot_parent == pivot_parent.parent.left:
+            pivot_parent.parent.left = pivot
+        else:
+            pivot_parent.parent.right = pivot
+        pivot.left = pivot_parent
+        pivot_parent.parent = pivot
+
+    def rotate_right(self, pivot_parent):
+        if pivot_parent == self.nil or pivot_parent.left == self.nil:
+            return
+        pivot = pivot_parent.left
+        pivot_parent.left = pivot.right
+        if pivot.right != self.nil:
+            pivot.right.parent = pivot_parent
+
+        pivot.parent = pivot_parent.parent
+        if pivot_parent.parent is None:
+            self.root = pivot
+        elif pivot_parent == pivot_parent.parent.right:
+            pivot_parent.parent.right = pivot
+        else:
+            pivot_parent.parent.left = pivot
+        pivot.right = pivot_parent
+        pivot_parent.parent = pivot
